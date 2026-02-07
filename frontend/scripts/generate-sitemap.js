@@ -2,13 +2,17 @@ import { writeFileSync } from 'fs';
 import axios from 'axios';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Load environment variables from .env file
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
+
 // Configuration
 const BASE_URL = 'https://donvik.com';
-const API_URL = 'http://localhost:5001/api'; // Assuming backend runs on 5001 locally during generation
+const API_URL = (process.env.VITE_API_URL || 'http://localhost:5001') + '/api';
 
 const generateSitemap = async () => {
   const currentDate = new Date().toISOString();
