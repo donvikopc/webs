@@ -11,6 +11,8 @@ const authRoutes = require('./routes/authRoutes');
 const siteConfigRoutes = require('./routes/siteConfigRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
 const clientRoutes = require('./routes/clientRoutes');
+const jobApplicationRoutes = require('./routes/jobApplicationRoutes');
+const jobRoutes = require('./routes/jobRoutes');
 const path = require('path');
 
 const app = express();
@@ -39,6 +41,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/config', siteConfigRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/clients', clientRoutes);
+app.use('/api/careers', jobApplicationRoutes);
+app.use('/api/jobs', jobRoutes);
 
 app.use(errorHandler);
 

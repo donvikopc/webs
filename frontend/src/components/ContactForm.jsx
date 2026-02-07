@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { contactService } from '../services/contactService';
 import { FileText, Send } from 'lucide-react';
+import ResumeModal from './ResumeModal';
 
 const ContactForm = () => {
+  const [isResumeModalOpen, setIsResumeModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -49,11 +51,17 @@ const ContactForm = () => {
             Looking for a job? <span className="font-normal text-gray-600">We're always looking for talented individuals to join our team.</span>
           </p>
         </div>
-        <button type="button" className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors whitespace-nowrap font-medium text-sm shadow-sm">
+        <button 
+          type="button" 
+          onClick={() => setIsResumeModalOpen(true)}
+          className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors whitespace-nowrap font-medium text-sm shadow-sm"
+        >
           <FileText size={16} />
           Submit Your Resume
         </button>
       </div>
+
+      <ResumeModal isOpen={isResumeModalOpen} onClose={() => setIsResumeModalOpen(false)} />
 
       {status === 'success' && (
         <div className="bg-green-100 text-green-800 p-4 rounded-lg mb-6">

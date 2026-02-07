@@ -8,7 +8,13 @@ const BlogCard = ({ blog }) => {
 
   return (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:scale-105 transition-transform duration-300 cursor-pointer">
-      {blog.image && (
+      {blog.image ? (
+        <img 
+          src={blog.image} 
+          alt={blog.title} 
+          className="w-full h-48 object-cover"
+        />
+      ) : (
         <div className="h-48 bg-gradient-to-br from-primary to-secondary" />
       )}
       <div className="p-6">

@@ -13,6 +13,10 @@ const serviceSchema = new mongoose.Schema({
   icon: {
     type: String,
     default: ''
+  },
+  features: {
+    type: [String],
+    default: []
   }
 }, {
   timestamps: true

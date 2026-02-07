@@ -1,53 +1,95 @@
 import ContactForm from '../components/ContactForm';
 import { Mail, Phone, MapPin } from 'lucide-react';
+import Meta from '../components/Meta';
+import PageHeader from '../components/PageHeader';
+import AnimatedSection from '../components/AnimatedSection';
 
 const Contact = () => {
-  return (
-    <div className="min-h-screen pt-24 pb-16 px-4 bg-white">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <h1 className="text-5xl font-serif font-bold mb-4 text-gray-900">
-            Get In <span className="text-blue-600">Touch</span>
-          </h1>
-          <p className="text-gray-500 max-w-3xl mx-auto">
-            Have a question or want to discuss a project? We'd love to hear from you.
-          </p>
-        </div>
+  const localBusinessSchema = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Donvik Private Limited",
+    "image": "https://donvik.com/logo.png",
+    "telephone": "+91-9100006020",
+    "email": "info@donvik.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "T-Hub, Plot No 1/C, Sy No 83/1, Raidurgam, Knowledge City Rd",
+      "addressLocality": "Hyderabad",
+      "addressRegion": "Telangana",
+      "postalCode": "500081",
+      "addressCountry": "IN"
+    },
+    "url": "https://donvik.com/contact",
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday"
+      ],
+      "opens": "09:00",
+      "closes": "18:00"
+    }
+  };
 
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <Meta 
+        title="Contact Us" 
+        description="Get in touch with Donvik Private Limited for inquiries, support, or project discussions." 
+        keywords="contact donvik, software support, hire developers, contact information"
+        schema={localBusinessSchema}
+      />
+      
+      <PageHeader 
+        title="Get In Touch" 
+        subtitle="Have a question or want to discuss a project? We'd love to hear from you."
+      />
+
+      <div className="max-w-7xl mx-auto px-4 py-20">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
           {/* Email Card */}
-          <div className="bg-white border border-gray-200 rounded-xl p-10 text-center hover:shadow-lg transition-shadow">
-            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6 text-blue-600">
-              <Mail size={24} />
+          <AnimatedSection delay={0.1} className="bg-white rounded-xl p-8 text-center shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 group">
+            <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6 text-primary group-hover:scale-110 transition-transform duration-300 group-hover:bg-primary group-hover:text-white">
+              <Mail size={32} />
             </div>
-            <h3 className="font-serif font-bold text-lg mb-2 text-gray-900">Email Us</h3>
-            <p className="text-gray-500 text-sm">info@speshway.com</p>
-          </div>
+            <h3 className="font-bold text-xl mb-2 text-gray-800">Email Us</h3>
+            <a href="mailto:info@donvik.com" className="text-gray-600 hover:text-primary transition-colors">
+              info@donvik.com
+            </a>
+          </AnimatedSection>
 
           {/* Phone Card */}
-          <div className="bg-white border border-gray-200 rounded-xl p-10 text-center hover:shadow-lg transition-shadow">
-            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6 text-blue-600">
-              <Phone size={24} />
+          <AnimatedSection delay={0.2} className="bg-white rounded-xl p-8 text-center shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 group">
+            <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6 text-primary group-hover:scale-110 transition-transform duration-300 group-hover:bg-primary group-hover:text-white">
+              <Phone size={32} />
             </div>
-            <h3 className="font-serif font-bold text-lg mb-2 text-gray-900">Call Us</h3>
-            <p className="text-gray-500 text-sm">+91 9100006020</p>
-          </div>
+            <h3 className="font-bold text-xl mb-2 text-gray-800">Call Us</h3>
+            <a href="tel:+919100006020" className="text-gray-600 hover:text-primary transition-colors">
+              +91 9100006020
+            </a>
+          </AnimatedSection>
 
           {/* Office Card */}
-          <div className="bg-white border border-gray-200 rounded-xl p-10 text-center hover:shadow-lg transition-shadow">
-            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6 text-blue-600">
-              <MapPin size={24} />
+          <AnimatedSection delay={0.3} className="bg-white rounded-xl p-8 text-center shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 group">
+            <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6 text-primary group-hover:scale-110 transition-transform duration-300 group-hover:bg-primary group-hover:text-white">
+              <MapPin size={32} />
             </div>
-            <h3 className="font-serif font-bold text-lg mb-2 text-gray-900">India Office</h3>
-            <p className="text-gray-500 text-sm leading-relaxed">
+            <h3 className="font-bold text-xl mb-2 text-gray-800">Visit Us</h3>
+            <p className="text-gray-600 leading-relaxed">
               T-Hub, Plot No 1/C, Sy No 83/1,<br />
               Raidurgam, Knowledge City Rd,<br />
-              panmaktha, Hyderabad, Serilingampalle..
+              Hyderabad, Telangana 500081
             </p>
-          </div>
+          </AnimatedSection>
         </div>
 
-        <ContactForm />
+        <AnimatedSection delay={0.4}>
+          <ContactForm />
+        </AnimatedSection>
       </div>
     </div>
   );

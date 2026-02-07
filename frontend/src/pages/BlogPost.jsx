@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { blogService } from '../services/blogService';
 import { Calendar, User, ArrowLeft, Share2 } from 'lucide-react';
+import Meta from '../components/Meta';
 
 const BlogPost = () => {
   const { id } = useParams();
@@ -42,19 +43,54 @@ const BlogPost = () => {
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
+  const blogPostingSchema = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": blog.title,
+    "image": blog.image ? [blog.image] : [],
+    "datePublished": blog.createdAt,
+    "dateModified": blog.updatedAt || blog.createdAt,
+    "author": [{
+      "@type": "Person",
+      "name": blog.author || "Donvik Team"
+    }],
+    "publisher": {
+      "@type": "Organization",
+      "name": "Donvik Private Limited",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://donvik.com/logo.png"
+      }
+    },
+    "description": blog.description
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       className="min-h-screen pt-20 pb-12 md:pt-24 md:pb-16 px-4"
     >
+      <Meta 
+        title={blog.title} 
+        description={blog.description} 
+        image={blog.image}
+        url={window.location.href}
+        schema={blogPostingSchema}
+      />
       <div className="max-w-4xl mx-auto">
         <Link to="/blogs" className="inline-flex items-center text-gray-600 hover:text-primary mb-8">
           <ArrowLeft size={20} className="mr-2" />
           Back to Blogs
         </Link>
 
-        {blog.image && (
+        {blog.image ? (
+          <img 
+            src={blog.image} 
+            alt={blog.title} 
+            className="w-full h-64 md:h-96 object-cover rounded-xl mb-8"
+          />
+        ) : (
           <div className="h-64 md:h-96 bg-gradient-to-br from-primary to-secondary rounded-xl mb-8" />
         )}
 

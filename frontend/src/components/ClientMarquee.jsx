@@ -38,7 +38,7 @@ const ClientMarquee = () => {
           {/* First Half */}
           <div className="flex items-center gap-16 px-8">
             {baseClients.map((client, index) => (
-              <div key={`${client._id}-${index}`} className="w-64 h-40 flex items-center justify-center p-4 bg-white rounded-xl hover:shadow-lg transition-all duration-300 border border-gray-100">
+              <div key={`${client._id}-${index}`} className="w-96 h-64 flex items-center justify-center p-8 bg-white rounded-xl hover:shadow-lg transition-all duration-300 border border-gray-100">
                 <img 
                   src={client.logo} 
                   alt={client.name} 
@@ -51,7 +51,7 @@ const ClientMarquee = () => {
           {/* Second Half (Exact Duplicate) */}
           <div className="flex items-center gap-16 px-8">
             {baseClients.map((client, index) => (
-              <div key={`${client._id}-${index}-duplicate`} className="w-64 h-40 flex items-center justify-center p-4 bg-white rounded-xl hover:shadow-lg transition-all duration-300 border border-gray-100">
+              <div key={`${client._id}-${index}-duplicate`} className="w-96 h-64 flex items-center justify-center p-8 bg-white rounded-xl hover:shadow-lg transition-all duration-300 border border-gray-100">
                 <img 
                   src={client.logo} 
                   alt={client.name} 

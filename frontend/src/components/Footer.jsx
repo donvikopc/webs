@@ -27,13 +27,13 @@ const Footer = () => {
             <h4 className="text-lg font-semibold mb-4">Contact Info</h4>
             <ul className="space-y-2">
               <li className="flex items-center gap-2 text-gray-400">
-                <Phone size={16} /> +91 1234567890
+                <Phone size={16} /> +91 9100006020
               </li>
               <li className="flex items-center gap-2 text-gray-400">
                 <Mail size={16} /> info@donvik.com
               </li>
               <li className="flex items-center gap-2 text-gray-400">
-                <MapPin size={16} /> New Delhi, India
+                <MapPin size={16} /> Hyderabad, India
               </li>
             </ul>
           </div>

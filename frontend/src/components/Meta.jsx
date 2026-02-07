@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-const Meta = ({ title, description, keywords, image, url }) => {
+const Meta = ({ title, description, keywords, image, url, schema }) => {
   const siteTitle = 'Donvik Private Limited';
   const fullTitle = title ? `${title} | ${siteTitle}` : siteTitle;
 
@@ -25,6 +25,13 @@ const Meta = ({ title, description, keywords, image, url }) => {
       
       {/* Canonical URL */}
       <link rel="canonical" href={url || window.location.href} />
+
+      {/* JSON-LD Structured Data */}
+      {schema && (
+        <script type="application/ld+json">
+          {JSON.stringify(schema)}
+        </script>
+      )}
     </Helmet>
   );
 };

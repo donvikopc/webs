@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import Button from '../components/Button';
 import Meta from '../components/Meta';
 import Carousel from '../components/Carousel';
-import { ArrowRight, CheckCircle } from 'lucide-react';
+import AnimatedSection from '../components/AnimatedSection';
+import { ArrowRight, CheckCircle, Zap, Shield, Clock } from 'lucide-react';
 import { getConfig } from '../services/configService';
 import ClientMarquee from '../components/ClientMarquee';
 
@@ -31,15 +31,51 @@ const Home = () => {
     fetchConfig();
   }, []);
 
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Donvik Private Limited",
+    "url": "https://donvik.com",
+    "logo": "https://donvik.com/logo.png",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+91-9100006020",
+      "contactType": "customer service"
+    },
+    "sameAs": [
+      "https://www.linkedin.com/company/donvik",
+      "https://twitter.com/donvik"
+    ]
+  };
+
+  const features = [
+    { 
+      icon: Zap,
+      title: 'Expert Team', 
+      desc: 'Highly skilled professionals with years of experience delivering top-tier solutions.' 
+    },
+    { 
+      icon: Shield,
+      title: 'Quality Solutions', 
+      desc: 'Delivering robust, secure, and scalable software solutions tailored to your needs.' 
+    },
+    { 
+      icon: Clock,
+      title: '24/7 Support', 
+      desc: 'Round-the-clock assistance ensuring your business operations never stop.' 
+    },
+  ];
+
   return (
     <>
       <Meta
         title="Home"
         description="Donvik Private Limited - Your trusted technology partner for innovative solutions and digital transformation."
         keywords="software development, web development, mobile app development, IT consulting"
+        schema={organizationSchema}
       />
       <div className="min-h-screen">
-      <section className="min-h-screen flex items-center justify-center relative px-4 overflow-hidden">
+      <section className="h-screen flex items-center justify-center relative px-4 overflow-hidden">
         {/* Dynamic Background */}
         <div className="absolute inset-0 z-0">
           {headerImages.length > 0 ? (
@@ -47,49 +83,30 @@ const Home = () => {
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-gray-900 to-black" />
           )}
-        </div>
-        
-        <div className="max-w-7xl mx-auto z-10 relative">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center"
-          >
-            <h1 className="text-4xl md:text-7xl font-bold mb-6">
-              <span className="gradient-text">Transform Your Business</span>
-              <br />
-              <span className="text-white">With Digital Innovation</span>
-            </h1>
-            <p className="text-xl text-gray-200 mb-8 max-w-3xl mx-auto">
-              Donvik Private Limited delivers cutting-edge software solutions that drive growth,
-              enhance efficiency, and build lasting digital experiences.
-            </p>
-
-          </motion.div>
+          <div className="absolute inset-0 bg-black/40 z-10" />
         </div>
       </section>
 
-      <section className="py-12 md:py-20 px-4 bg-gray-50">
+      <section className="py-20 px-4 bg-gray-50">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">Why Choose Us</h2>
+          <AnimatedSection className="text-center mb-16">
+            <h2 className="text-3xl md:text-5xl font-bold mb-4">Why Choose Us</h2>
+            <div className="w-24 h-1 bg-primary mx-auto rounded-full"></div>
+          </AnimatedSection>
+          
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { title: 'Expert Team', desc: 'Highly skilled professionals with years of experience' },
-              { title: 'Quality Solutions', desc: 'Delivering robust and scalable software solutions' },
-              { title: '24/7 Support', desc: 'Round-the-clock assistance for all your needs' },
-            ].map((item, index) => (
-              <motion.div
+            {features.map((item, index) => (
+              <AnimatedSection
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.2 }}
-                className="text-center p-6"
+                delay={index * 0.2}
+                className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100"
               >
-                <CheckCircle className="mx-auto mb-4 text-primary" size={48} />
-                <h3 className="text-2xl font-bold mb-2">{item.title}</h3>
-                <p className="text-gray-600">{item.desc}</p>
-              </motion.div>
+                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6 mx-auto text-primary">
+                  <item.icon size={32} />
+                </div>
+                <h3 className="text-2xl font-bold mb-4 text-center">{item.title}</h3>
+                <p className="text-gray-600 text-center leading-relaxed">{item.desc}</p>
+              </AnimatedSection>
             ))}
           </div>
         </div>
@@ -97,18 +114,25 @@ const Home = () => {
 
       <ClientMarquee />
 
-      <section className="py-20 px-4">
-        <div className="max-w-7xl mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-6 gradient-text">Ready to Get Started?</h2>
-          <p className="text-xl text-gray-600 mb-8">
-            Let's discuss how we can help transform your business.
+      <section className="py-24 px-4 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gray-900 -z-10"></div>
+        <div className="absolute inset-0 bg-primary/10 -z-10"></div>
+        
+        <AnimatedSection className="max-w-4xl mx-auto text-center text-white">
+          <h2 className="text-4xl md:text-5xl font-bold mb-8">Ready to Get Started?</h2>
+          <p className="text-xl text-gray-300 mb-10 leading-relaxed">
+            Let's discuss how we can help transform your business with our cutting-edge technology solutions.
           </p>
           <Link to="/contact">
-            <Button>
-              Contact Us <ArrowRight className="inline ml-2" size={20} />
-            </Button>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-primary hover:bg-secondary text-white font-bold py-4 px-10 rounded-full text-lg shadow-lg hover:shadow-primary/50 transition-all duration-300 flex items-center mx-auto gap-2"
+            >
+              Contact Us <ArrowRight size={20} />
+            </motion.button>
           </Link>
-        </div>
+        </AnimatedSection>
       </section>
     </div>
     </>

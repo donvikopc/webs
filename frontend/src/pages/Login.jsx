@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { authService } from '../services/authService';
 import { setToken } from '../services/authService';
 import { Lock, Mail, ArrowLeft } from 'lucide-react';
+import Meta from '../components/Meta';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -38,6 +39,11 @@ const Login = () => {
 
   return (
     <div className="min-h-screen pt-24 pb-16 px-4 flex items-center justify-center">
+      <Meta 
+        title="Admin Login" 
+        description="Secure login portal for Donvik Private Limited administrators." 
+        keywords="admin login, secure access, donvik admin"
+      />
       <div className="w-full max-w-md">
         <Link to="/" className="inline-flex items-center text-gray-600 hover:text-primary mb-8">
           <ArrowLeft size={20} className="mr-2" />

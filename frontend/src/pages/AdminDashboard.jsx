@@ -5,20 +5,47 @@ import { blogService } from '../services/blogService';
 import { serviceApi } from '../services/serviceService';
 import { contactService } from '../services/contactService';
 import { clientService } from '../services/clientService';
+import { careerService } from '../services/careerService';
+import { jobService } from '../services/jobService';
 import { getConfig, updateConfig } from '../services/configService';
 import api from '../lib/api';
-import { FileText, Layers, MessageSquare, LogOut, Plus, Trash2, Edit, Image, Upload, X, Users } from 'lucide-react';
+import Cropper from 'react-easy-crop';
+import getCroppedImg from '../utils/cropImage';
+import { FileText, Layers, MessageSquare, LogOut, Plus, Trash2, Edit, Image, Upload, X, Users, ZoomIn, ZoomOut, Briefcase, FilePlus, Eye } from 'lucide-react';
+import DocumentPreviewModal from '../components/DocumentPreviewModal';
 
 const AdminDashboard = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('blogs');
-  const [data, setData] = useState({ blogs: [], services: [], contacts: [], clients: [] });
+  const [data, setData] = useState({
+    blogs: [],
+    services: [],
+    contacts: [],
+    clients: [],
+    applications: [],
+    jobs: []
+  });
+  const [loading, setLoading] = useState(true);
   const [headerImages, setHeaderImages] = useState([]);
+  const [aboutImage, setAboutImage] = useState('');
   const [showModal, setShowModal] = useState(false);
+  
+  // Cropping State
+  const [isCropping, setIsCropping] = useState(false);
+  const [croppingImage, setCroppingImage] = useState(null);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [cropType, setCropType] = useState(null); // 'header', 'about', or 'client'
+  const [aspectRatio, setAspectRatio] = useState(16 / 9);
+
   const [editingItem, setEditingItem] = useState(null);
   const [formData, setFormData] = useState({});
   const [uploading, setUploading] = useState(false);
+
+  // Document Preview State
+  const [previewDoc, setPreviewDoc] = useState(null);
 
   useEffect(() => {
     if (!user) {
@@ -26,36 +53,58 @@ const AdminDashboard = () => {
       return;
     }
     loadData();
-  }, [user, activeTab]);
+  }, [user]);
 
   const loadData = async () => {
     try {
-      if (activeTab === 'blogs') {
-        const response = await blogService.getAll();
-        setData((prev) => ({ ...prev, blogs: response.data.blogs }));
-      } else if (activeTab === 'services') {
-        const response = await serviceApi.getAll();
-        setData((prev) => ({ ...prev, services: response.data }));
-      } else if (activeTab === 'contacts') {
-        const response = await contactService.getAll();
-        setData((prev) => ({ ...prev, contacts: response.data }));
-      } else if (activeTab === 'clients') {
-        const response = await clientService.getAll();
-        setData((prev) => ({ ...prev, clients: response.data }));
-      } else if (activeTab === 'settings') {
-        const config = await getConfig('headerImages');
-        if (config && Array.isArray(config.value)) {
-          setHeaderImages(config.value);
-        } else {
-          // Fallback to check for old bannerImage and migrate if needed
-          const oldConfig = await getConfig('bannerImage');
-          if (oldConfig && oldConfig.value) {
-            setHeaderImages([oldConfig.value]);
-          }
+      const [
+        blogsRes, 
+        servicesRes, 
+        contactsRes, 
+        clientsRes, 
+        applicationsRes,
+        jobsRes,
+        headerConfig, 
+        aboutConfig
+      ] = await Promise.all([
+        blogService.getAll(),
+        serviceApi.getAll(),
+        contactService.getAll(),
+        clientService.getAll(),
+        careerService.getAllApplications(),
+        jobService.getAll(),
+        getConfig('headerImages'),
+        getConfig('aboutImage')
+      ]);
+
+      setData({
+        blogs: blogsRes.data.blogs || [],
+        services: servicesRes.data || [],
+        contacts: contactsRes.data || [],
+        clients: clientsRes.data || [],
+        applications: applicationsRes || [],
+        jobs: jobsRes.data || []
+      });
+
+      if (headerConfig && Array.isArray(headerConfig.value)) {
+        setHeaderImages(headerConfig.value);
+      } else {
+        // Fallback to check for old bannerImage and migrate if needed
+        const oldConfig = await getConfig('bannerImage');
+        if (oldConfig && oldConfig.value) {
+          setHeaderImages([oldConfig.value]);
         }
+      }
+      
+      if (aboutConfig && aboutConfig.value) {
+        setAboutImage(aboutConfig.value);
       }
     } catch (error) {
       console.error('Error loading data:', error);
+      if (error.response?.status === 401) {
+        logout();
+        navigate('/login');
+      }
     }
   };
 
@@ -69,6 +118,8 @@ const AdminDashboard = () => {
         await serviceApi.delete(id);
       } else if (activeTab === 'clients') {
         await clientService.delete(id);
+      } else if (activeTab === 'jobs') {
+        await jobService.delete(id);
       }
       loadData();
     } catch (error) {
@@ -86,22 +137,30 @@ const AdminDashboard = () => {
           await blogService.create(formData);
         }
       } else if (activeTab === 'services') {
+        const serviceData = {
+          ...formData,
+          features: formData.featuresText 
+            ? formData.featuresText.split('\n').filter(f => f.trim()) 
+            : []
+        };
+        delete serviceData.featuresText;
+
         if (editingItem) {
-          await serviceApi.update(editingItem._id, formData);
+          await serviceApi.update(editingItem._id, serviceData);
         } else {
-          await serviceApi.create(formData);
+          await serviceApi.create(serviceData);
         }
       } else if (activeTab === 'clients') {
         if (editingItem) {
-          // Edit not supported for now as per requirements, just create/delete
-          // But for completeness, let's just allow create for now or assume simple create
-          // Actually, let's stick to create/delete for clients as it's simpler
-          // But the UI might try to call update. Let's just create for now or handle update if I add it to service.
-          // Wait, I didn't add update to clientService. I should probably add it or just support create/delete.
-          // For now, I'll just support create.
           await clientService.create(formData);
         } else {
           await clientService.create(formData);
+        }
+      } else if (activeTab === 'jobs') {
+        if (editingItem) {
+          await jobService.update(editingItem._id, formData);
+        } else {
+          await jobService.create(formData);
         }
       }
       setShowModal(false);
@@ -113,24 +172,59 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleImageUpload = async (e) => {
+  const onCropComplete = (croppedArea, croppedAreaPixels) => {
+    setCroppedAreaPixels(croppedAreaPixels);
+  };
+
+  const initiateCrop = (e, type) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    const formData = new FormData();
-    formData.append('image', file);
+    const reader = new FileReader();
+    reader.addEventListener('load', () => {
+      setCroppingImage(reader.result);
+      setCropType(type);
+      setAspectRatio(type === 'client' ? 1 : 16 / 9);
+      setIsCropping(true);
+      setZoom(1);
+      setCrop({ x: 0, y: 0 });
+    });
+    reader.readAsDataURL(file);
+    // Reset file input
+    e.target.value = null;
+  };
 
-    setUploading(true);
+  const handleCropSave = async () => {
     try {
-      const response = await api.post('/upload', formData, {
+      setUploading(true);
+      const croppedImageBlob = await getCroppedImg(croppingImage, croppedAreaPixels);
+      
+      const uploadData = new FormData();
+      uploadData.append('image', croppedImageBlob, 'cropped-image.jpg');
+
+      const response = await api.post('/upload', uploadData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-      setHeaderImages([...headerImages, response.data.url]);
+
+      if (cropType === 'header') {
+        setHeaderImages([...headerImages, response.data.url]);
+      } else if (cropType === 'about') {
+        setAboutImage(response.data.url);
+      } else if (cropType === 'client') {
+        setFormData(prev => ({ ...prev, logo: response.data.url }));
+      } else if (cropType === 'blog') {
+        setFormData(prev => ({ ...prev, image: response.data.url }));
+      }
+
+      // Reset crop state
+      setIsCropping(false);
+      setCroppingImage(null);
+      setCropType(null);
     } catch (error) {
+      console.error('Error uploading cropped image:', error);
       alert('Error uploading image');
-      console.error(error);
     } finally {
       setUploading(false);
     }
@@ -145,6 +239,7 @@ const AdminDashboard = () => {
     e.preventDefault();
     try {
       await updateConfig('headerImages', headerImages);
+      await updateConfig('aboutImage', aboutImage);
       alert('Settings updated successfully');
     } catch (error) {
       alert('Error updating settings');
@@ -152,8 +247,12 @@ const AdminDashboard = () => {
   };
 
   const handleEdit = (item) => {
-    setEditingItem(item);
-    setFormData(item);
+    const itemWithFeatures = {
+      ...item,
+      featuresText: item.features ? item.features.join('\n') : ''
+    };
+    setEditingItem(itemWithFeatures);
+    setFormData(itemWithFeatures);
     setShowModal(true);
   };
 
@@ -162,7 +261,7 @@ const AdminDashboard = () => {
     if (activeTab === 'blogs') {
       setFormData({ title: '', description: '', content: '', author: '', image: '' });
     } else if (activeTab === 'services') {
-      setFormData({ name: '', description: '', icon: 'Globe' });
+      setFormData({ name: '', description: '', icon: 'Globe', featuresText: '' });
     } else if (activeTab === 'clients') {
       setFormData({ name: '', logo: '' });
     }
@@ -173,12 +272,18 @@ const AdminDashboard = () => {
     { id: 'blogs', icon: FileText, label: 'Blogs', count: data.blogs.length },
     { id: 'services', icon: Layers, label: 'Services', count: data.services.length },
     { id: 'clients', icon: Users, label: 'Clients', count: data.clients.length },
+    { id: 'applications', icon: Briefcase, label: 'Applications', count: data.applications.length },
+    { id: 'jobs', icon: FilePlus, label: 'Manage Jobs', count: data.jobs.length },
     { id: 'contacts', icon: MessageSquare, label: 'Messages', count: data.contacts.length },
     { id: 'settings', icon: Image, label: 'Settings', count: 0 },
   ];
 
   return (
     <div className="min-h-screen pt-24 pb-16 px-4 bg-gray-50">
+      <Meta 
+        title="Admin Dashboard" 
+        description="Manage content, services, and inquiries for Donvik Private Limited." 
+      />
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold gradient-text">Admin Dashboard</h1>
@@ -227,7 +332,58 @@ const AdminDashboard = () => {
               )}
             </div>
   
-            {activeTab === 'contacts' ? (
+          {activeTab === 'applications' ? (
+              <div className="space-y-4">
+                {data.applications.length === 0 ? (
+                  <p className="text-gray-500 text-center py-8">No applications yet</p>
+                ) : (
+                  data.applications.map((app) => (
+                    <div key={app._id} className="border rounded-lg p-4">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <div className="flex items-center gap-3 mb-1">
+                            <h3 className="font-bold text-lg">{app.name}</h3>
+                            <span className="bg-purple-100 text-purple-800 text-xs px-2 py-0.5 rounded-full font-medium border border-purple-200">
+                              Applied for: {app.position}
+                            </span>
+                          </div>
+                          <p className="text-sm text-gray-600 mb-2 flex items-center gap-2">
+                            <span>{app.email}</span>
+                            <span>•</span>
+                            <span>{app.phone}</span>
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className={`px-2 py-1 rounded text-xs font-medium uppercase ${
+                            app.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                            app.status === 'reviewed' ? 'bg-blue-100 text-blue-800' :
+                            app.status === 'contacted' ? 'bg-green-100 text-green-800' :
+                            'bg-red-100 text-red-800'
+                          }`}>
+                            {app.status}
+                          </span>
+                          <button 
+                            onClick={() => setPreviewDoc({ url: app.resumeUrl, title: `${app.name}'s Resume` })}
+                            className="flex items-center gap-1 px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded text-sm transition-colors"
+                          >
+                            <Eye size={14} /> View Resume
+                          </button>
+                        </div>
+                      </div>
+                      {app.message && (
+                        <div className="mt-3 bg-gray-50 p-3 rounded text-sm">
+                          <p className="font-semibold mb-1">Cover Letter/Message:</p>
+                          <p>{app.message}</p>
+                        </div>
+                      )}
+                      <p className="text-xs text-gray-400 mt-2">
+                        Applied: {new Date(app.createdAt).toLocaleDateString()}
+                      </p>
+                    </div>
+                  ))
+                )}
+              </div>
+            ) : activeTab === 'contacts' ? (
               <div className="space-y-4">
                 {data.contacts.length === 0 ? (
                   <p className="text-gray-500 text-center py-8">No messages yet</p>
@@ -244,7 +400,64 @@ const AdminDashboard = () => {
                   ))
                 )}
               </div>
-            ) : activeTab === 'settings' ? (
+        ) : activeTab === 'jobs' ? (
+          <div className="space-y-4">
+            <div className="flex justify-end mb-4">
+              <button
+                onClick={() => handleAdd('jobs')}
+                className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-dark transition-colors"
+              >
+                <Plus size={20} /> Add Job
+              </button>
+            </div>
+            {data.jobs.length === 0 ? (
+              <p className="text-gray-500 text-center py-8">No job postings yet</p>
+            ) : (
+              <div className="grid gap-4">
+                {data.jobs.map((job) => (
+                  <div key={job._id} className="border rounded-lg p-4 flex justify-between items-start">
+                    <div>
+                      <h3 className="font-bold text-lg">{job.title}</h3>
+                      <div className="flex flex-wrap gap-2 text-sm text-gray-600 mt-2">
+                        <span className="bg-gray-100 px-2 py-1 rounded">{job.department}</span>
+                        <span className="bg-gray-100 px-2 py-1 rounded">{job.location}</span>
+                        <span className="bg-gray-100 px-2 py-1 rounded">{job.type}</span>
+                        <span className="bg-gray-100 px-2 py-1 rounded">{job.experience} Exp</span>
+                        <span className={`px-2 py-1 rounded font-medium ${job.status === 'Open' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                          {job.status}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handleEdit(item => ({
+                          ...item,
+                          _id: job._id,
+                          title: job.title,
+                          description: job.description,
+                          department: job.department,
+                          location: job.location,
+                          type: job.type,
+                          experience: job.experience,
+                          status: job.status
+                        }))}
+                        className="p-2 text-blue-600 hover:bg-blue-50 rounded"
+                      >
+                        <Edit size={18} />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(job._id)}
+                        className="p-2 text-red-600 hover:bg-red-50 rounded"
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        ) : activeTab === 'settings' ? (
               <div className="max-w-2xl">
                 <form onSubmit={handleSettingsUpdate} className="space-y-6">
                   <div>
@@ -270,7 +483,7 @@ const AdminDashboard = () => {
                         id="imageUpload"
                         className="hidden"
                         accept="image/*"
-                        onChange={handleImageUpload}
+                        onChange={(e) => initiateCrop(e, 'header')}
                         disabled={uploading}
                       />
                       <label htmlFor="imageUpload" className="cursor-pointer flex flex-col items-center">
@@ -281,6 +494,39 @@ const AdminDashboard = () => {
                       </label>
                     </div>
                   </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-4">About Page "Our Story" Image</label>
+                    {aboutImage && (
+                      <div className="relative group aspect-video rounded-lg overflow-hidden border mb-4">
+                        <img src={aboutImage} alt="About Story" className="w-full h-full object-cover" />
+                        <button
+                          type="button"
+                          onClick={() => setAboutImage('')}
+                          className="absolute top-2 right-2 p-1 bg-red-600 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <X size={16} />
+                        </button>
+                      </div>
+                    )}
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:bg-gray-50 transition-colors">
+                      <input
+                        type="file"
+                        id="aboutImageUpload"
+                        className="hidden"
+                        accept="image/*"
+                        onChange={(e) => initiateCrop(e, 'about')}
+                        disabled={uploading}
+                      />
+                      <label htmlFor="aboutImageUpload" className="cursor-pointer flex flex-col items-center">
+                        <Upload size={32} className="text-gray-400 mb-2" />
+                        <span className="text-gray-600">
+                          {uploading ? 'Uploading...' : 'Click to upload new image'}
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+
                   <button type="submit" className="gradient-bg text-white px-6 py-3 rounded-lg font-medium">
                     Save Changes
                   </button>
@@ -314,11 +560,22 @@ const AdminDashboard = () => {
                 ) : (
                   (activeTab === 'blogs' ? data.blogs : data.services).map((item) => (
                     <div key={item._id} className="flex justify-between items-center border rounded-lg p-4">
-                      <div>
-                        <h3 className="font-bold">{item.title || item.name}</h3>
-                        <p className="text-sm text-gray-600 truncate max-w-md">
-                          {item.description}
-                        </p>
+                      <div className="flex items-center gap-4">
+                        {activeTab === 'blogs' && item.image && (
+                          <div className="w-16 h-16 flex-shrink-0">
+                            <img 
+                              src={item.image} 
+                              alt={item.title} 
+                              className="w-full h-full object-cover rounded-lg"
+                            />
+                          </div>
+                        )}
+                        <div>
+                          <h3 className="font-bold">{item.title || item.name}</h3>
+                          <p className="text-sm text-gray-600 truncate max-w-md">
+                            {item.description}
+                          </p>
+                        </div>
                       </div>
                       <div className="flex gap-2">
                         <button onClick={() => handleEdit(item)} className="p-2 hover:bg-gray-100 rounded-lg">
@@ -336,7 +593,86 @@ const AdminDashboard = () => {
           </div>
         </div>
   
-        {showModal && (
+          {isCropping && (
+        <div className="fixed inset-0 bg-black/90 flex flex-col items-center justify-center z-[60] p-4">
+          <div className="relative w-full max-w-5xl h-[80vh] bg-black rounded-lg overflow-hidden mb-6 border border-gray-800">
+            <Cropper
+              image={croppingImage}
+              crop={crop}
+              zoom={zoom}
+              aspect={aspectRatio}
+              onCropChange={setCrop}
+              onCropComplete={onCropComplete}
+              onZoomChange={setZoom}
+            />
+          </div>
+          <div className="w-full max-w-2xl space-y-4">
+             <div className="flex justify-center gap-4 mb-2">
+               <button 
+                 onClick={() => setAspectRatio(16/9)} 
+                 className={`px-3 py-1 rounded text-sm ${aspectRatio === 16/9 ? 'bg-white text-black' : 'bg-gray-700 text-white'}`}
+               >
+                 16:9
+               </button>
+               <button 
+                 onClick={() => setAspectRatio(4/3)} 
+                 className={`px-3 py-1 rounded text-sm ${aspectRatio === 4/3 ? 'bg-white text-black' : 'bg-gray-700 text-white'}`}
+               >
+                 4:3
+               </button>
+               <button 
+                 onClick={() => setAspectRatio(1)} 
+                 className={`px-3 py-1 rounded text-sm ${aspectRatio === 1 ? 'bg-white text-black' : 'bg-gray-700 text-white'}`}
+               >
+                 1:1
+               </button>
+             </div>
+             <div className="flex items-center gap-4 text-white">
+               <ZoomOut size={20} />
+               <input
+                 type="range"
+                 value={zoom}
+                 min={1}
+                 max={3}
+                 step={0.1}
+                 aria-labelledby="Zoom"
+                 onChange={(e) => setZoom(Number(e.target.value))}
+                 className="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer"
+               />
+               <ZoomIn size={20} />
+             </div>
+             <div className="flex gap-4">
+               <button
+                 onClick={() => {
+                   setIsCropping(false);
+                   setCroppingImage(null);
+                 }}
+                 className="flex-1 bg-white/20 text-white py-3 rounded-lg hover:bg-white/30 transition-colors"
+               >
+                 Cancel
+               </button>
+               <button
+                 onClick={handleCropSave}
+                 disabled={uploading}
+                 className="flex-1 gradient-bg text-white py-3 rounded-lg font-medium"
+               >
+                 {uploading ? 'Uploading...' : 'Crop & Upload'}
+               </button>
+             </div>
+          </div>
+        </div>
+      )}
+
+      {previewDoc && (
+        <DocumentPreviewModal
+          isOpen={!!previewDoc}
+          onClose={() => setPreviewDoc(null)}
+          documentUrl={previewDoc.url}
+          title={previewDoc.title}
+        />
+      )}
+
+      {showModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
             <h2 className="text-2xl font-bold mb-6">
@@ -376,13 +712,22 @@ const AdminDashboard = () => {
                     className="w-full px-4 py-3 rounded-lg border"
                     required
                   />
-                  <input
-                    type="text"
-                    placeholder="Image URL"
-                    value={formData.image || ''}
-                    onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                    className="w-full px-4 py-3 rounded-lg border"
-                  />
+                  <label className="block border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:bg-gray-50 transition-colors cursor-pointer">
+                    {formData.image && (
+                      <div className="mb-4 aspect-video bg-gray-100 rounded flex items-center justify-center p-2 h-32 mx-auto">
+                        <img src={formData.image} alt="Preview" className="max-w-full max-h-full object-contain" />
+                      </div>
+                    )}
+                    <input
+                      type="file"
+                      className="hidden"
+                      accept="image/*"
+                      onChange={(e) => initiateCrop(e, 'blog')}
+                    />
+                    <span className="text-blue-600 font-medium">
+                      {formData.image ? 'Click to change image' : 'Click to upload image'}
+                    </span>
+                  </label>
                 </>
               ) : activeTab === 'clients' ? (
                 <>
@@ -405,25 +750,77 @@ const AdminDashboard = () => {
                       id="clientLogoUpload"
                       className="hidden"
                       accept="image/*"
-                      onChange={async (e) => {
-                        const file = e.target.files[0];
-                        if (!file) return;
-                        const data = new FormData();
-                        data.append('image', file);
-                        try {
-                          const res = await api.post('/upload', data, {
-                            headers: { 'Content-Type': 'multipart/form-data' }
-                          });
-                          setFormData({ ...formData, logo: res.data.url });
-                        } catch (err) {
-                          alert('Error uploading logo');
-                        }
-                      }}
+                      onChange={(e) => initiateCrop(e, 'client')}
                     />
                     <label htmlFor="clientLogoUpload" className="cursor-pointer block">
                       <span className="text-blue-600 font-medium">Click to upload logo</span>
                     </label>
                   </div>
+                </>
+              ) : activeTab === 'jobs' ? (
+                <>
+                  <input
+                    type="text"
+                    placeholder="Job Title"
+                    value={formData.title || ''}
+                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                    className="w-full px-4 py-3 rounded-lg border"
+                    required
+                  />
+                  <div className="grid grid-cols-2 gap-4">
+                    <input
+                      type="text"
+                      placeholder="Department"
+                      value={formData.department || ''}
+                      onChange={(e) => setFormData({ ...formData, department: e.target.value })}
+                      className="w-full px-4 py-3 rounded-lg border"
+                      required
+                    />
+                    <input
+                      type="text"
+                      placeholder="Location"
+                      value={formData.location || ''}
+                      onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                      className="w-full px-4 py-3 rounded-lg border"
+                      required
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <select
+                      value={formData.type || 'Full-time'}
+                      onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                      className="w-full px-4 py-3 rounded-lg border"
+                    >
+                      <option value="Full-time">Full-time</option>
+                      <option value="Part-time">Part-time</option>
+                      <option value="Contract">Contract</option>
+                      <option value="Internship">Internship</option>
+                      <option value="Remote">Remote</option>
+                    </select>
+                    <input
+                      type="text"
+                      placeholder="Experience (e.g. 2 years)"
+                      value={formData.experience || ''}
+                      onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
+                      className="w-full px-4 py-3 rounded-lg border"
+                      required
+                    />
+                  </div>
+                  <select
+                    value={formData.status || 'Open'}
+                    onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                    className="w-full px-4 py-3 rounded-lg border"
+                  >
+                    <option value="Open">Open</option>
+                    <option value="Closed">Closed</option>
+                  </select>
+                  <textarea
+                    placeholder="Job Description & Responsibilities"
+                    value={formData.description || ''}
+                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    className="w-full px-4 py-3 rounded-lg border h-48"
+                    required
+                  />
                 </>
               ) : (
                 <>
@@ -441,6 +838,12 @@ const AdminDashboard = () => {
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     className="w-full px-4 py-3 rounded-lg border h-32"
                     required
+                  />
+                  <textarea
+                    placeholder="Features (one per line)"
+                    value={formData.featuresText || ''}
+                    onChange={(e) => setFormData({ ...formData, featuresText: e.target.value })}
+                    className="w-full px-4 py-3 rounded-lg border h-32"
                   />
                   <select
                     value={formData.icon || 'Globe'}
