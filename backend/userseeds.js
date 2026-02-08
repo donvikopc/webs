@@ -7,23 +7,28 @@ const seedAdmin = async () => {
   try {
     await connectDB();
 
-    const adminExists = await Admin.findOne({ email: 'admin@donvik.com' });
+    const adminExists = await Admin.findOne({ username: 'admin' });
 
     if (adminExists) {
-      console.log('Admin user already exists');
+      adminExists.email = 'pcharan214@gmail.com';
+      adminExists.password = 'password123';
+      await adminExists.save();
+      console.log('Admin user updated successfully');
+      console.log('Email: pcharan214@gmail.com');
+      console.log('Password: password123');
       process.exit();
     }
 
     const admin = new Admin({
       username: 'admin',
-      email: 'admin@donvik.com',
+      email: 'pcharan214@gmail.com',
       password: 'password123'
     });
 
     await admin.save();
 
     console.log('Admin user created successfully');
-    console.log('Email: admin@donvik.com');
+    console.log('Email: pcharan214@gmail.com');
     console.log('Password: password123');
 
     process.exit();

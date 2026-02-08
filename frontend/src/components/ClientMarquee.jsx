@@ -43,6 +43,7 @@ const ClientMarquee = () => {
                   src={client.logo} 
                   alt={client.name} 
                   className="max-w-full max-h-full object-contain"
+                  loading="lazy"
                 />
               </div>
             ))}
@@ -56,6 +57,7 @@ const ClientMarquee = () => {
                   src={client.logo} 
                   alt={client.name} 
                   className="max-w-full max-h-full object-contain"
+                  loading="lazy"
                 />
               </div>
             ))}

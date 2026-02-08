@@ -29,18 +29,30 @@ const Carousel = ({ images, autoPlayInterval = 5000 }) => {
 
   if (!images || images.length === 0) return null;
 
+  // Preload next image
+  const nextIndex = (currentIndex + 1) % images.length;
+
   return (
-    <div className="relative w-full h-full overflow-hidden">
+    <div className="relative w-full h-full overflow-hidden bg-black">
+      {/* Preload next image (hidden) */}
+      <img src={images[nextIndex]} alt="" className="hidden" />
+
       <AnimatePresence mode='wait'>
         <motion.div
           key={currentIndex}
-          style={{ backgroundImage: `url(${images[currentIndex]})` }}
-          className="absolute inset-0 w-full h-full bg-cover bg-center bg-fixed bg-no-repeat"
+          className="absolute inset-0 w-full h-full"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
-        />
+        >
+          <img 
+            src={images[currentIndex]} 
+            alt={`Donvik Private Limited Highlight ${currentIndex + 1}`}
+            className="w-full h-full md:object-cover"
+            fetchPriority={currentIndex === 0 ? "high" : "auto"}
+          />
+        </motion.div>
       </AnimatePresence>
       
       {/* Overlay */}

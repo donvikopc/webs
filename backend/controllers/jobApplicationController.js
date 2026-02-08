@@ -1,4 +1,5 @@
 const JobApplication = require('../models/JobApplication');
+const sendEmail = require('../utils/sendEmail');
 
 // @desc    Submit a job application
 // @route   POST /api/careers
@@ -47,8 +48,33 @@ const updateApplicationStatus = async (req, res) => {
   }
 };
 
+// @desc    Reply to applicant
+// @route   POST /api/careers/reply
+// @access  Private/Admin
+const replyToApplicant = async (req, res) => {
+  try {
+    const { email, subject, message, id } = req.body;
+
+    if (!email || !subject || !message) {
+      return res.status(400).json({ message: 'Please provide email, subject and message' });
+    }
+
+    await sendEmail({
+      email,
+      subject,
+      message,
+      html: `<p>${message.replace(/\n/g, '<br>')}</p>`
+    });
+
+    res.json({ success: true, message: 'Email sent successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to send email: ' + error.message });
+  }
+};
+
 module.exports = {
   submitApplication,
   getAllApplications,
-  updateApplicationStatus
+  updateApplicationStatus,
+  replyToApplicant
 };

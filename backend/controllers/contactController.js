@@ -1,4 +1,5 @@
 const Contact = require('../models/Contact');
+const sendEmail = require('../utils/sendEmail');
 
 const submitContact = async (req, res) => {
   try {
@@ -19,7 +20,32 @@ const getAllContacts = async (req, res) => {
   }
 };
 
+const replyToContact = async (req, res) => {
+  try {
+    const { email, subject, message, id } = req.body;
+
+    if (!email || !subject || !message) {
+      return res.status(400).json({ message: 'Please provide email, subject and message' });
+    }
+
+    await sendEmail({
+      email,
+      subject,
+      message,
+      html: `<p>${message.replace(/\n/g, '<br>')}</p>`
+    });
+
+    // Optionally update the contact record to indicate a reply was sent
+    // For now, we'll just return success
+    
+    res.json({ success: true, message: 'Email sent successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to send email: ' + error.message });
+  }
+};
+
 module.exports = {
   submitContact,
-  getAllContacts
+  getAllContacts,
+  replyToContact
 };

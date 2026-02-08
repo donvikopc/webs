@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import logo from '../assets/logo.jpeg';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -58,7 +59,10 @@ const Navbar = () => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <Link to="/" className={`text-2xl font-bold flex items-center gap-2 ${isHome && !isScrolled ? 'text-white' : 'gradient-text'}`}>
+          <Link to="/" className={`text-2xl font-bold flex items-center gap-3 ${isHome && !isScrolled ? 'text-white' : 'gradient-text'}`}>
+            <div className="flex items-center justify-center h-12 w-12 bg-white/10 rounded-lg p-1">
+              <img src={logo} alt="Donvik Logo" className="h-full w-full object-contain" />
+            </div>
             <motion.span
               whileHover={{ scale: 1.05 }}
               transition={{ type: "spring", stiffness: 400, damping: 10 }}

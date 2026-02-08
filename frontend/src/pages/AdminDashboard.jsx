@@ -13,6 +13,8 @@ import Cropper from 'react-easy-crop';
 import getCroppedImg from '../utils/cropImage';
 import { FileText, Layers, MessageSquare, LogOut, Plus, Trash2, Edit, Image, Upload, X, Users, ZoomIn, ZoomOut, Briefcase, FilePlus, Eye } from 'lucide-react';
 import DocumentPreviewModal from '../components/DocumentPreviewModal';
+import ReplyModal from '../components/ReplyModal';
+import Meta from '../components/Meta';
 
 const AdminDashboard = () => {
   const { user, logout } = useAuth();
@@ -47,6 +49,16 @@ const AdminDashboard = () => {
   // Document Preview State
   const [previewDoc, setPreviewDoc] = useState(null);
 
+  // Reply Modal State
+  const [replyModal, setReplyModal] = useState({
+    isOpen: false,
+    recipientEmail: '',
+    id: null,
+    type: null, // 'contact' or 'application'
+    initialSubject: '',
+    initialMessage: ''
+  });
+
   useEffect(() => {
     if (!user) {
       navigate('/login');
@@ -71,7 +83,7 @@ const AdminDashboard = () => {
         serviceApi.getAll(),
         contactService.getAll(),
         clientService.getAll(),
-        careerService.getAllApplications(),
+        careerService.getApplications(),
         jobService.getAll(),
         getConfig('headerImages'),
         getConfig('aboutImage')
@@ -82,7 +94,7 @@ const AdminDashboard = () => {
         services: servicesRes.data || [],
         contacts: contactsRes.data || [],
         clients: clientsRes.data || [],
-        applications: applicationsRes || [],
+        applications: applicationsRes.data || [],
         jobs: jobsRes.data || []
       });
 
@@ -268,6 +280,88 @@ const AdminDashboard = () => {
     setShowModal(true);
   };
 
+  const sendReply = async ({ email, subject, message }) => {
+    try {
+      if (replyModal.type === 'contact') {
+        await contactService.reply({ 
+            id: replyModal.id, 
+            email, 
+            subject, 
+            message 
+        });
+      } else if (replyModal.type === 'application') {
+        await careerService.reply({ 
+            id: replyModal.id, 
+            email, 
+            subject, 
+            message 
+        });
+      }
+      
+      alert('Reply sent successfully');
+      setReplyModal(prev => ({ ...prev, isOpen: false }));
+    } catch (error) {
+      console.error('Error sending reply:', error);
+      alert('Failed to send reply');
+    }
+  };
+
+  const handleReply = (item, type) => {
+    let initialMessage = '';
+    let initialSubject = '';
+
+    if (type === 'contact') {
+      initialSubject = `Re: ${item.subject || 'Your Inquiry'}`;
+      initialMessage = `Dear ${item.name}, 
+ 
+ Thank you for reaching out to Donvikopc Solutions. 
+ 
+ We have received your message and appreciate your interest in our organization. Our team will review your details, and we’ll get back to you shortly if your profile matches our current requirements. 
+ 
+ In the meantime, feel free to explore more about our company or reach out if you have any additional questions. 
+ 
+ Thank you once again for your interest. 
+ 
+ Best regards, 
+ 
+ HR Team 
+ 
+ Donvikopc Solutions 
+ 
+ +91 9100006020 
+ 
+ info@donvik.com`;
+    } else if (type === 'application') {
+      initialSubject = `Update on your application for ${item.position}`;
+      initialMessage = `Dear ${item.name}, 
+ 
+ Thank you for applying for the position of ${item.position} at Donvikopc Solutions. 
+ 
+ We have successfully received your resume and our recruitment team is currently reviewing your profile. If your qualifications match our requirements, we will contact you for the next steps in the hiring process. 
+ 
+ We appreciate your interest in joining Donvikopc Solutions and wish you all the best. 
+ 
+ Warm regards, 
+ 
+ HR Team 
+ 
+ Donvikopc Solutions 
+ 
+ +91 9100006020 
+ 
+ info@donvik.com`;
+    }
+
+    setReplyModal({
+      isOpen: true,
+      recipientEmail: item.email,
+      id: item._id,
+      type,
+      initialSubject,
+      initialMessage
+    });
+  };
+
   const tabs = [
     { id: 'blogs', icon: FileText, label: 'Blogs', count: data.blogs.length },
     { id: 'services', icon: Layers, label: 'Services', count: data.services.length },
@@ -368,6 +462,12 @@ const AdminDashboard = () => {
                           >
                             <Eye size={14} /> View Resume
                           </button>
+                          <button 
+                            onClick={() => handleReply(app, 'application')}
+                            className="flex items-center gap-1 px-3 py-1 bg-primary/10 text-primary hover:bg-primary/20 rounded text-sm transition-colors"
+                          >
+                            <MessageSquare size={14} /> Reply
+                          </button>
                         </div>
                       </div>
                       {app.message && (
@@ -390,12 +490,22 @@ const AdminDashboard = () => {
                 ) : (
                   data.contacts.map((contact) => (
                     <div key={contact._id} className="border rounded-lg p-4">
-                      <h3 className="font-bold">{contact.subject}</h3>
-                    <p className="text-sm text-gray-600">
-                      {contact.name} • {contact.email}
-                      {contact.phone && ` • ${contact.phone}`}
-                    </p>
-                    <p className="mt-2">{contact.message}</p>
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h3 className="font-bold">{contact.subject}</h3>
+                          <p className="text-sm text-gray-600">
+                            {contact.name} • {contact.email}
+                            {contact.phone && ` • ${contact.phone}`}
+                          </p>
+                        </div>
+                        <button 
+                          onClick={() => handleReply(contact, 'contact')}
+                          className="flex items-center gap-1 px-3 py-1 bg-primary/10 text-primary hover:bg-primary/20 rounded text-sm transition-colors"
+                        >
+                          <MessageSquare size={14} /> Reply
+                        </button>
+                      </div>
+                      <p className="mt-2">{contact.message}</p>
                     </div>
                   ))
                 )}
@@ -671,6 +781,14 @@ const AdminDashboard = () => {
           title={previewDoc.title}
         />
       )}
+
+      <ReplyModal
+        isOpen={replyModal.isOpen}
+        onClose={() => setReplyModal(prev => ({ ...prev, isOpen: false }))}
+        recipientEmail={replyModal.recipientEmail}
+        onSend={sendReply}
+        title={replyModal.type === 'application' ? 'Reply to Applicant' : 'Reply to Message'}
+      />
 
       {showModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">

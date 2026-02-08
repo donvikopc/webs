@@ -68,6 +68,7 @@ const About = () => {
                   src={aboutImage} 
                   alt="Our Story" 
                   className="w-full h-full object-contain p-4 hover:scale-105 transition-transform duration-700"
+                  loading="lazy"
                 />
               ) : (
                 <div className="w-full h-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white text-opacity-50">
