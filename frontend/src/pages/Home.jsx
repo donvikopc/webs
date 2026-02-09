@@ -128,7 +128,7 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             {stats.map((stat, index) => (
-              <AnimatedSection key={index} delay={index * 0.1} className="flex flex-col items-center">
+              <AnimatedSection key={index} delay={index * 0.1} animation="scale" className="flex flex-col items-center">
                 <stat.icon size={32} className="mb-2 opacity-80" />
                 <h3 className="text-3xl md:text-4xl font-bold mb-1">{stat.value}</h3>
                 <p className="text-blue-100 text-sm md:text-base">{stat.label}</p>
@@ -142,7 +142,7 @@ const Home = () => {
       <section className="py-20 px-4 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <AnimatedSection className="order-2 md:order-1">
+            <AnimatedSection className="order-2 md:order-1" animation="slideRight">
               <div className="relative">
                 <div className="absolute -top-4 -left-4 w-24 h-24 bg-primary/10 rounded-full z-0"></div>
                 <div className="relative z-10 rounded-2xl overflow-hidden shadow-2xl border border-gray-100 h-[400px] md:h-[500px] bg-gray-50">
@@ -163,7 +163,7 @@ const Home = () => {
               </div>
             </AnimatedSection>
             
-            <AnimatedSection className="order-1 md:order-2" delay={0.2}>
+            <AnimatedSection className="order-1 md:order-2" delay={0.2} animation="slideLeft">
               <h4 className="text-primary font-bold tracking-wider uppercase mb-2">Who We Are</h4>
               <h2 className="text-3xl md:text-5xl font-bold mb-6 text-gray-900">
                 Transforming Businesses with <span className="text-primary">Technology</span>
@@ -200,7 +200,7 @@ const Home = () => {
       {services.length > 0 && (
         <section className="py-20 px-4 bg-gray-50">
           <div className="max-w-7xl mx-auto">
-            <AnimatedSection className="text-center mb-16">
+            <AnimatedSection className="text-center mb-16" animation="slideDown">
               <h4 className="text-primary font-bold tracking-wider uppercase mb-2">What We Do</h4>
               <h2 className="text-3xl md:text-5xl font-bold mb-4">Our Services</h2>
               <div className="w-24 h-1 bg-primary mx-auto rounded-full mb-6"></div>
@@ -211,7 +211,7 @@ const Home = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
               {services.map((service, index) => (
-                <AnimatedSection key={service._id} delay={index * 0.1} className="h-full">
+                <AnimatedSection key={service._id} delay={index * 0.1} animation="scale" className="h-full">
                   <ServiceCard service={service} onSeeMore={handleSeeMore} />
                 </AnimatedSection>
               ))}
@@ -232,7 +232,7 @@ const Home = () => {
       <section className="py-20 px-4 bg-white relative overflow-hidden">
         <div className="absolute top-0 right-0 w-1/3 h-full bg-gray-50 skew-x-12 transform translate-x-20 -z-10"></div>
         <div className="max-w-7xl mx-auto">
-          <AnimatedSection className="text-center mb-16">
+          <AnimatedSection className="text-center mb-16" animation="slideDown">
             <h2 className="text-3xl md:text-5xl font-bold mb-4">Why Choose Us</h2>
             <div className="w-24 h-1 bg-primary mx-auto rounded-full"></div>
           </AnimatedSection>
@@ -242,6 +242,7 @@ const Home = () => {
               <AnimatedSection
                 key={index}
                 delay={index * 0.2}
+                animation="slideUp"
                 className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100 group"
               >
                 <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6 mx-auto text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">

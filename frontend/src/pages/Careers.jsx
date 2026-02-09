@@ -116,6 +116,7 @@ const Careers = () => {
               <AnimatedSection 
                 key={index} 
                 delay={index * 0.1}
+                animation="scale"
                 className="p-6 rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 group"
               >
                 <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center mb-4 text-primary group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all duration-300">
@@ -165,6 +166,7 @@ const Careers = () => {
               <AnimatedSection 
                 key={job._id} 
                 delay={index * 0.1}
+                animation="slideLeft"
                 className="bg-white p-6 md:p-8 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-6 group"
               >
                 <div>

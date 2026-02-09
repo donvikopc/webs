@@ -52,7 +52,7 @@ const Contact = () => {
       <div className="max-w-7xl mx-auto px-4 py-20">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
           {/* Email Card */}
-          <AnimatedSection delay={0.1} className="bg-white rounded-xl p-8 text-center shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 group">
+          <AnimatedSection delay={0.1} animation="scale" className="bg-white rounded-xl p-8 text-center shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 group">
             <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6 text-primary group-hover:scale-110 transition-transform duration-300 group-hover:bg-primary group-hover:text-white">
               <Mail size={32} />
             </div>
@@ -63,7 +63,7 @@ const Contact = () => {
           </AnimatedSection>
 
           {/* Phone Card */}
-          <AnimatedSection delay={0.2} className="bg-white rounded-xl p-8 text-center shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 group">
+          <AnimatedSection delay={0.2} animation="scale" className="bg-white rounded-xl p-8 text-center shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 group">
             <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6 text-primary group-hover:scale-110 transition-transform duration-300 group-hover:bg-primary group-hover:text-white">
               <Phone size={32} />
             </div>
@@ -74,7 +74,7 @@ const Contact = () => {
           </AnimatedSection>
 
           {/* Office Card */}
-          <AnimatedSection delay={0.3} className="bg-white rounded-xl p-8 text-center shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 group">
+          <AnimatedSection delay={0.3} animation="scale" className="bg-white rounded-xl p-8 text-center shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 group">
             <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6 text-primary group-hover:scale-110 transition-transform duration-300 group-hover:bg-primary group-hover:text-white">
               <MapPin size={32} />
             </div>
@@ -87,7 +87,7 @@ const Contact = () => {
           </AnimatedSection>
         </div>
 
-        <AnimatedSection delay={0.4}>
+        <AnimatedSection delay={0.4} animation="slideUp">
           <ContactForm />
         </AnimatedSection>
       </div>

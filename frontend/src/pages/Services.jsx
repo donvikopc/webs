@@ -69,6 +69,7 @@ const Services = () => {
                 <AnimatedSection
                   key={service._id}
                   delay={index * 0.1}
+                  animation="scale"
                   className="h-full"
                 >
                   <ServiceCard 

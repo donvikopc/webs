@@ -46,7 +46,7 @@ const About = () => {
       <section className="py-20 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <AnimatedSection>
+            <AnimatedSection animation="slideRight">
               <h2 className="text-3xl md:text-4xl font-bold mb-6 relative inline-block">
                 Our Story
                 <span className="absolute bottom-0 left-0 w-1/2 h-1 bg-primary rounded-full"></span>
@@ -62,7 +62,7 @@ const About = () => {
               </p>
             </AnimatedSection>
             
-            <AnimatedSection delay={0.2} className="h-[500px] rounded-2xl overflow-hidden bg-white shadow-2xl border border-gray-100">
+            <AnimatedSection delay={0.2} animation="slideLeft" className="h-[500px] rounded-2xl overflow-hidden bg-white shadow-2xl border border-gray-100">
               {aboutImage ? (
                 <img 
                   src={aboutImage} 
@@ -82,13 +82,13 @@ const About = () => {
 
       <section className="py-20 px-4 bg-gray-50">
         <div className="max-w-7xl mx-auto">
-          <AnimatedSection className="text-center mb-16">
+          <AnimatedSection className="text-center mb-16" animation="slideDown">
             <h2 className="text-4xl font-bold mb-4">Our Mission & Vision</h2>
             <div className="w-24 h-1 bg-primary mx-auto rounded-full"></div>
           </AnimatedSection>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <AnimatedSection className="bg-white rounded-xl p-8 text-center shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100">
+            <AnimatedSection animation="slideRight" className="bg-white rounded-xl p-8 text-center shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100">
               <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Target className="text-primary" size={40} />
               </div>
@@ -99,7 +99,7 @@ const About = () => {
               </p>
             </AnimatedSection>
             
-            <AnimatedSection delay={0.2} className="bg-white rounded-xl p-8 text-center shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100">
+            <AnimatedSection delay={0.2} animation="slideLeft" className="bg-white rounded-xl p-8 text-center shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100">
               <div className="w-20 h-20 bg-secondary/10 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Eye className="text-secondary" size={40} />
               </div>
@@ -115,7 +115,7 @@ const About = () => {
 
       <section className="py-20 px-4">
         <div className="max-w-7xl mx-auto">
-          <AnimatedSection className="text-center mb-16">
+          <AnimatedSection className="text-center mb-16" animation="slideDown">
             <h2 className="text-4xl font-bold mb-4">Our Achievements</h2>
             <div className="w-24 h-1 bg-primary mx-auto rounded-full"></div>
           </AnimatedSection>
@@ -125,6 +125,7 @@ const About = () => {
               <AnimatedSection
                 key={index}
                 delay={index * 0.1}
+                animation="scale"
                 className="text-center p-6 rounded-xl hover:bg-gray-50 transition-colors duration-300"
               >
                 <div className="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg transform hover:scale-110 transition-transform duration-300">
