@@ -330,7 +330,7 @@ const AdminDashboard = () => {
  
  +91 8978190675 
  
- info@donvik.com`;
+ info@donvikopc.com`;
     } else if (type === 'application') {
       initialSubject = `Update on your application for ${item.position}`;
       initialMessage = `Dear ${item.name}, 
@@ -349,7 +349,7 @@ const AdminDashboard = () => {
  
  +91 8978190675 
  
- info@donvik.com`;
+ info@donvikopc.com`;
     }
 
     setReplyModal({

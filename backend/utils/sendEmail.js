@@ -14,7 +14,7 @@ const sendEmail = async (options) => {
   });
 
   const message = {
-    from: `${process.env.FROM_NAME || 'Donvik Admin'} <${process.env.FROM_EMAIL || 'noreply@donvik.com'}>`,
+    from: `${process.env.FROM_NAME || 'Donvik Admin'} <${process.env.FROM_EMAIL || 'noreply@donvikopc.com'}>`,
     to: options.email,
     subject: options.subject,
     text: options.message,

@@ -94,8 +94,8 @@ const Login = () => {
                   onChange={handleChange}
                   required
                   className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all bg-gray-50 focus:bg-white"
-                  placeholder="admin@donvik.com"
-                />
+          placeholder="admin@donvikopc.com"
+        />
               </div>
             </div>
 

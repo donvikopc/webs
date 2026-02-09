@@ -64,14 +64,15 @@ const Home = () => {
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "Donvik Tech (OPC) Private Limited",
-    "url": "https://donvik.com",
-    "logo": "https://donvik.com/logo.jpg",
+    "url": "https://donvikopc.com",
+    "logo": "https://donvikopc.com/logo.jpg",
     "contactPoint": {
       "@type": "ContactPoint",
       "telephone": "+91-8978190675",
       "contactType": "customer service"
     },
     "sameAs": [
+      "https://www.instagram.com/don_vik8",
       "https://www.linkedin.com/company/donvik",
       "https://twitter.com/donvik"
     ]
@@ -105,9 +106,9 @@ const Home = () => {
   return (
     <>
       <Meta
-        title="Home"
+        title="Donvik Official Website"
         description="Donvik Tech (OPC) Private Limited - Your trusted technology partner for innovative solutions and digital transformation."
-        keywords="Donvik, Donvik OPC, Donvik Tech, donvikopc, donvikopctech"
+        keywords="Donvik, Donvik OPC, Donvik Tech, donvikopc, donvikopctech, Donvik Official"
         schema={organizationSchema}
       />
       <div className="min-h-screen">
@@ -119,7 +120,37 @@ const Home = () => {
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-gray-900 to-black" />
           )}
-          <div className="absolute inset-0 bg-black/20 z-10" />
+          <div className="absolute inset-0 bg-black/40 z-10" />
+        </div>
+
+        {/* Hero Content */}
+        <div className="relative z-20 text-center max-w-5xl mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
+              Welcome to <span className="text-indigo-400">Donvik Tech</span>
+            </h1>
+            <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto">
+              Transforming ideas into digital reality. We are Donvik Tech (OPC) Private Limited, your partner for innovative software solutions.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link 
+                to="/services" 
+                className="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white bg-primary rounded-full hover:bg-primary/90 transition-all transform hover:scale-105 shadow-lg"
+              >
+                Our Services <ArrowRight className="ml-2 w-5 h-5" />
+              </Link>
+              <Link 
+                to="/contact" 
+                className="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white border-2 border-white/30 bg-white/10 backdrop-blur-sm rounded-full hover:bg-white/20 transition-all transform hover:scale-105"
+              >
+                Contact Us
+              </Link>
+            </div>
+          </motion.div>
         </div>
       </section>
 

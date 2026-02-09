@@ -48,8 +48,8 @@ const JobDetail = () => {
     "hiringOrganization": {
       "@type": "Organization",
       "name": "Donvik Tech (OPC) Private Limited",
-      "sameAs": "https://donvik.com",
-      "logo": "https://donvik.com/logo.jpg"
+      "sameAs": "https://donvikopc.com",
+      "logo": "https://donvikopc.com/logo.jpg"
     },
     "jobLocation": {
       "@type": "Place",

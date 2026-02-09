@@ -9,9 +9,9 @@ const Contact = () => {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     "name": "Donvik Tech (OPC) Private Limited",
-    "image": "https://donvik.com/logo.jpg",
+    "image": "https://donvikopc.com/logo.jpg",
     "telephone": "+91-8978190675",
-    "email": "info@donvik.com",
+    "email": "info@donvikopc.com",
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "T-Hub, Plot No 1/C, Sy No 83/1, Raidurgam, Knowledge City Rd",
@@ -20,7 +20,12 @@ const Contact = () => {
       "postalCode": "500081",
       "addressCountry": "IN"
     },
-    "url": "https://donvik.com/contact",
+    "sameAs": [
+      "https://www.instagram.com/don_vik8",
+      "https://www.linkedin.com/company/donvik",
+      "https://twitter.com/donvik"
+    ],
+    "url": "https://donvikopc.com/contact",
     "openingHoursSpecification": {
       "@type": "OpeningHoursSpecification",
       "dayOfWeek": [
@@ -57,8 +62,8 @@ const Contact = () => {
               <Mail size={32} />
             </div>
             <h3 className="font-bold text-xl mb-2 text-gray-800">Email Us</h3>
-            <a href="mailto:info@donvik.com" className="text-gray-600 hover:text-primary transition-colors">
-              info@donvik.com
+            <a href="mailto:info@donvikopc.com" className="text-gray-600 hover:text-primary transition-colors">
+              info@donvikopc.com
             </a>
           </AnimatedSection>
 

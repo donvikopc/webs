@@ -11,7 +11,7 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 // Configuration
-const BASE_URL = 'https://donvik.com';
+const BASE_URL = 'https://donvikopc.com';
 const API_URL = (process.env.VITE_API_URL || 'http://localhost:5001') + '/api';
 
 const generateSitemap = async () => {

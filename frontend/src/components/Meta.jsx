@@ -7,7 +7,7 @@ const Meta = ({ title, description, keywords, image, url, schema }) => {
   const defaultImage = `${window.location.origin}/logo.jpg`;
   const metaImage = image || defaultImage;
 
-  const defaultKeywords = 'Donvik, Donvik OPC, Donvik Tech, donvikopc, donvikopctech, software development, web development, mobile app development, IT consulting';
+  const defaultKeywords = 'Donvik, Donvik OPC, Donvik Tech, donvikopc, donvikopctech, Donvik Official, software development, web development, mobile app development, IT consulting';
   const metaKeywords = keywords ? `${keywords}, ${defaultKeywords}` : defaultKeywords;
 
   return (

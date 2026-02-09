@@ -30,7 +30,7 @@ const Footer = () => {
                 <Phone size={16} /> +91 8978190675
               </li>
               <li className="flex items-center gap-2 text-gray-400">
-                <Mail size={16} /> info@donvik.com
+                <Mail size={16} /> info@donvikopc.com
               </li>
               <li className="flex items-center gap-2 text-gray-400">
                 <MapPin size={16} /> Hyderabad, India

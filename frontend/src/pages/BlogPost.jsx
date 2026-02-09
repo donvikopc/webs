@@ -59,7 +59,7 @@ const BlogPost = () => {
       "name": "Donvik Private Limited",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://donvik.com/logo.png"
+        "url": "https://donvikopc.com/logo.png"
       }
     },
     "description": blog.description
