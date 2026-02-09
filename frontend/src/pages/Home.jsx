@@ -63,12 +63,12 @@ const Home = () => {
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "Donvik Private Limited",
+    "name": "Donvik Tech (OPC) Private Limited",
     "url": "https://donvik.com",
-    "logo": "https://donvik.com/logo.png",
+    "logo": "https://donvik.com/logo.jpg",
     "contactPoint": {
       "@type": "ContactPoint",
-      "telephone": "+91-9100006020",
+      "telephone": "+91-8978190675",
       "contactType": "customer service"
     },
     "sameAs": [
@@ -106,8 +106,8 @@ const Home = () => {
     <>
       <Meta
         title="Home"
-        description="Donvik Private Limited - Your trusted technology partner for innovative solutions and digital transformation."
-        keywords="software development, web development, mobile app development, IT consulting"
+        description="Donvik Tech (OPC) Private Limited - Your trusted technology partner for innovative solutions and digital transformation."
+        keywords="Donvik, Donvik OPC, Donvik Tech, donvikopc, donvikopctech"
         schema={organizationSchema}
       />
       <div className="min-h-screen">
@@ -149,7 +149,7 @@ const Home = () => {
                    {aboutImage ? (
                     <img 
                       src={aboutImage} 
-                      alt="About Donvik" 
+                      alt="About Donvik Tech" 
                       className="w-full h-full object-contain p-4 hover:scale-105 transition-transform duration-700"
                       loading="lazy"
                     />
@@ -169,7 +169,7 @@ const Home = () => {
                 Transforming Businesses with <span className="text-primary">Technology</span>
               </h2>
               <p className="text-gray-600 mb-6 text-lg leading-relaxed">
-                At Donvik Private Limited, we believe in the power of technology to solve complex business challenges. 
+                At Donvik Tech (OPC) Private Limited, we believe in the power of technology to solve complex business challenges. 
                 Our team of experts is dedicated to delivering innovative solutions that drive growth and efficiency.
               </p>
               <ul className="space-y-4 mb-8">

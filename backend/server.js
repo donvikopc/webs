@@ -21,6 +21,18 @@ const path = require('path');
 
 const app = express();
 
+// CORS Middleware - Must be first
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:5173',
+    'https://donvikopc.com',
+    'https://www.donvikopc.com',
+    process.env.CLIENT_URL
+  ].filter(Boolean),
+  credentials: true
+}));
+
 connectDB();
 
 // Security Middleware
@@ -46,11 +58,6 @@ app.use('/api', limiter); // Apply to API routes only
 
 // Compression Middleware
 app.use(compression());
-
-app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:3000',
-  credentials: true
-}));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

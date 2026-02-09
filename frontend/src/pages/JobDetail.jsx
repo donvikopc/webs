@@ -47,9 +47,9 @@ const JobDetail = () => {
     "employmentType": job.type?.toUpperCase().replace(' ', '_'),
     "hiringOrganization": {
       "@type": "Organization",
-      "name": "Donvik Private Limited",
+      "name": "Donvik Tech (OPC) Private Limited",
       "sameAs": "https://donvik.com",
-      "logo": "https://donvik.com/logo.png"
+      "logo": "https://donvik.com/logo.jpg"
     },
     "jobLocation": {
       "@type": "Place",
@@ -66,7 +66,7 @@ const JobDetail = () => {
     <div className="pt-20 min-h-screen bg-gray-50 pb-20">
       <Meta 
         title={job.title} 
-        description={`${job.title} at Donvik Private Limited. ${job.description.substring(0, 150)}...`} 
+        description={`${job.title} at Donvik Tech (OPC) Private Limited. ${job.description.substring(0, 150)}...`} 
         url={window.location.href}
         schema={jobPostingSchema}
       />

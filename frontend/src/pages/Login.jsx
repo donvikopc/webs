@@ -42,7 +42,7 @@ const Login = () => {
     <div className="min-h-screen pt-24 pb-16 px-4 flex items-center justify-center bg-gray-50 relative overflow-hidden">
       <Meta 
         title="Admin Login" 
-        description="Secure login portal for Donvik Private Limited administrators." 
+        description="Secure login portal for Donvik Tech (OPC) Private Limited administrators." 
         keywords="admin login, secure access, donvik admin"
       />
 

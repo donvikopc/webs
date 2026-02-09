@@ -7,7 +7,7 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <h3 className="text-2xl font-bold mb-4">Donvik Private Limited</h3>
+            <h3 className="text-2xl font-bold mb-4">Donvik Tech (OPC) Private Limited</h3>
             <p className="text-gray-400">
               Your trusted technology partner for innovative solutions and digital transformation.
             </p>
@@ -27,7 +27,7 @@ const Footer = () => {
             <h4 className="text-lg font-semibold mb-4">Contact Info</h4>
             <ul className="space-y-2">
               <li className="flex items-center gap-2 text-gray-400">
-                <Phone size={16} /> +91 9100006020
+                <Phone size={16} /> +91 8978190675
               </li>
               <li className="flex items-center gap-2 text-gray-400">
                 <Mail size={16} /> info@donvik.com

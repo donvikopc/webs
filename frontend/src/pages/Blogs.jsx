@@ -38,8 +38,8 @@ const Blogs = () => {
     <div className="min-h-screen">
       <Meta 
         title="Our Blog" 
-        description="Stay updated with the latest insights, news, and technology trends from Donvik Private Limited." 
-        keywords="technology blog, software trends, tech news, insights"
+        description="Stay updated with the latest insights, news, and technology trends from Donvik Tech (OPC) Private Limited." 
+        keywords="technology blog, software trends, tech news, insights, donvik blog, software development articles"
       />
       
       <PageHeader 

@@ -64,8 +64,8 @@ const Careers = () => {
     <div className="min-h-screen bg-gray-50">
       <Meta 
         title="Careers" 
-        description="Join the Donvik Private Limited team. Explore open job positions and build the future with us." 
-        keywords="careers, jobs, hiring, software engineer jobs, tech careers"
+        description="Join the Donvik Tech (OPC) Private Limited team. Explore open job positions and build the future with us." 
+        keywords="careers, jobs, hiring, software engineer jobs, tech careers, donvik careers, work at donvik"
       />
       
       {/* Hero Section */}

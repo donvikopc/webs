@@ -43,8 +43,8 @@ const Services = () => {
     <div className="min-h-screen">
       <Meta 
         title="Our Services" 
-        description="Explore our comprehensive software solutions tailored to your business needs." 
-        keywords="software services, web development, app development, IT solutions"
+        description="Explore our comprehensive software solutions tailored to your business needs, including web development, app development, and consulting." 
+        keywords="software services, web development, app development, IT solutions, donvik services, custom software"
       />
       
       <PageHeader 

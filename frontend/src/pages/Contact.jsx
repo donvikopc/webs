@@ -8,9 +8,9 @@ const Contact = () => {
   const localBusinessSchema = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "name": "Donvik Private Limited",
-    "image": "https://donvik.com/logo.png",
-    "telephone": "+91-9100006020",
+    "name": "Donvik Tech (OPC) Private Limited",
+    "image": "https://donvik.com/logo.jpg",
+    "telephone": "+91-8978190675",
     "email": "info@donvik.com",
     "address": {
       "@type": "PostalAddress",
@@ -39,7 +39,7 @@ const Contact = () => {
     <div className="min-h-screen bg-gray-50">
       <Meta 
         title="Contact Us" 
-        description="Get in touch with Donvik Private Limited for inquiries, support, or project discussions." 
+        description="Get in touch with Donvik Tech (OPC) Private Limited for inquiries, support, or project discussions." 
         keywords="contact donvik, software support, hire developers, contact information"
         schema={localBusinessSchema}
       />
@@ -68,8 +68,8 @@ const Contact = () => {
               <Phone size={32} />
             </div>
             <h3 className="font-bold text-xl mb-2 text-gray-800">Call Us</h3>
-            <a href="tel:+919100006020" className="text-gray-600 hover:text-primary transition-colors">
-              +91 9100006020
+            <a href="tel:+918978190675" className="text-gray-600 hover:text-primary transition-colors">
+              +91 8978190675
             </a>
           </AnimatedSection>
 

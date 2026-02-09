@@ -328,7 +328,7 @@ const AdminDashboard = () => {
  
  Donvikopc Solutions 
  
- +91 9100006020 
+ +91 8978190675 
  
  info@donvik.com`;
     } else if (type === 'application') {
@@ -347,7 +347,7 @@ const AdminDashboard = () => {
  
  Donvikopc Solutions 
  
- +91 9100006020 
+ +91 8978190675 
  
  info@donvik.com`;
     }

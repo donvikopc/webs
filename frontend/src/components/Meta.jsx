@@ -1,17 +1,20 @@
 import { Helmet } from 'react-helmet-async';
 
 const Meta = ({ title, description, keywords, image, url, schema }) => {
-  const siteTitle = 'Donvik Private Limited';
+  const siteTitle = 'Donvik Tech (OPC) Private Limited';
   const fullTitle = title ? `${title} | ${siteTitle}` : siteTitle;
   const currentUrl = url || window.location.href;
-  const defaultImage = `${window.location.origin}/logo.jpeg`;
+  const defaultImage = `${window.location.origin}/logo.jpg`;
   const metaImage = image || defaultImage;
+
+  const defaultKeywords = 'Donvik, Donvik OPC, Donvik Tech, donvikopc, donvikopctech, software development, web development, mobile app development, IT consulting';
+  const metaKeywords = keywords ? `${keywords}, ${defaultKeywords}` : defaultKeywords;
 
   return (
     <Helmet>
       <title>{fullTitle}</title>
-      <meta name="description" content={description || 'Donvik Private Limited - Your trusted technology partner for innovative solutions and digital transformation.'} />
-      {keywords && <meta name="keywords" content={keywords} />}
+      <meta name="description" content={description || 'Donvik Tech (OPC) Private Limited - Your trusted technology partner for innovative solutions and digital transformation.'} />
+      <meta name="keywords" content={metaKeywords} />
       
       {/* Open Graph / Facebook */}
       <meta property="og:type" content="website" />

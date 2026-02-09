@@ -34,12 +34,12 @@ const About = () => {
     <div className="min-h-screen">
       <Meta 
         title="About Us" 
-        description="Learn about Donvik Private Limited, our mission, vision, and the team driving digital transformation." 
-        keywords="about donvik, company profile, software company mission, tech team"
+        description="Learn about Donvik Tech (OPC) Private Limited, our mission, vision, and the expert team driving digital transformation and software innovation." 
+        keywords="about donvik, company profile, software company mission, tech team, donvik story, donvik vision"
       />
       
       <PageHeader 
-        title="About Donvik Private Limited" 
+        title="About Donvik Tech (OPC) Private Limited" 
         subtitle="Your trusted partner for innovative software solutions"
       />
 
@@ -52,7 +52,7 @@ const About = () => {
                 <span className="absolute bottom-0 left-0 w-1/2 h-1 bg-primary rounded-full"></span>
               </h2>
               <p className="text-gray-600 mb-6 text-lg leading-relaxed">
-                Donvik Private Limited was founded with a vision to transform businesses through
+                Donvik Tech (OPC) Private Limited was founded with a vision to transform businesses through
                 innovative technology solutions. What started as a small team of passionate developers
                 has grown into a full-service technology partner for companies worldwide.
               </p>
@@ -66,7 +66,7 @@ const About = () => {
               {aboutImage ? (
                 <img 
                   src={aboutImage} 
-                  alt="Our Story" 
+                  alt="Donvik Tech Team and Story" 
                   className="w-full h-full object-contain p-4 hover:scale-105 transition-transform duration-700"
                   loading="lazy"
                 />
