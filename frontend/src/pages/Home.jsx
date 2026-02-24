@@ -124,34 +124,7 @@ const Home = () => {
         </div>
 
         {/* Hero Content */}
-        <div className="relative z-20 text-center max-w-5xl mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-              Welcome to <span className="text-indigo-400">Donvik Tech</span>
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto">
-              Transforming ideas into digital reality. We are Donvik Tech (OPC) Private Limited, your partner for innovative software solutions.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link 
-                to="/services" 
-                className="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white bg-primary rounded-full hover:bg-primary/90 transition-all transform hover:scale-105 shadow-lg"
-              >
-                Our Services <ArrowRight className="ml-2 w-5 h-5" />
-              </Link>
-              <Link 
-                to="/contact" 
-                className="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white border-2 border-white/30 bg-white/10 backdrop-blur-sm rounded-full hover:bg-white/20 transition-all transform hover:scale-105"
-              >
-                Contact Us
-              </Link>
-            </div>
-          </motion.div>
-        </div>
+       
       </section>
 
       {/* Stats Section */}
